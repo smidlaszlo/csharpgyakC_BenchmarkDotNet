@@ -257,6 +257,37 @@ namespace Benchmark
         }
     }
 
+    [ReturnValueValidator(true)]
+    public class MathBenchmark2
+    {
+        [Params(10, 20)]
+        public int Parameter { get; set; }
+
+        [Params(2)]
+        public int Number { get; set; }
+
+        [Benchmark]
+        //[Arguments(2)]
+        //public int Square(int number)
+        public int Square()
+        {
+            int result = 1;
+
+            for (int i = 0; i < Parameter; i++)
+            {
+                result *= Number;
+            }
+
+            return result;
+        }
+
+        [Benchmark]
+        public int Square2()
+        {
+            return (int)Math.Pow(Number, Parameter);
+        }
+    }
+
     //.NET Core 3-tol
     [ThreadingDiagnoser]//Segít azonosítani a szálak közötti versengést, a holtpontokat és más szálkezelési problémákat.
     public class ThreadingBenchmark
@@ -329,6 +360,7 @@ namespace Benchmark
     {
         public ReturnValueValidationConfig()
         {
+            Add(DefaultConfig.Instance);
             AddValidator(ReturnValueValidator.FailOnError);
         }
     }
@@ -377,6 +409,7 @@ namespace Benchmark
             //var summary = BenchmarkRunner.Run<StringConcatBenchmark4>();
             //var summary = BenchmarkRunner.Run<ListSumBenchmark>();
             //var summary = BenchmarkRunner.Run<MathBenchmark>();
+            //var summary = BenchmarkRunner.Run<MathBenchmark2>();
             //var summary = BenchmarkRunner.Run<ThreadingBenchmark>();
             //var summary = BenchmarkRunner.Run<ReturnValueValidationBenchmark>(new ReturnValueValidationConfig());
             //var summary = BenchmarkRunner.Run<StringJoinBuilderBenchmarks>();
